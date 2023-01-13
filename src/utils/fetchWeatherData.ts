@@ -16,7 +16,9 @@ export async function fetchWeatherData(
   }
 
   const data = await res.json();
-  if (data.error) return data;
+  if (data.error) {
+    throw new Error(data.error);
+  }
 
   return {
     temperature: data.temperature,
