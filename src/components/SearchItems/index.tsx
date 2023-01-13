@@ -4,22 +4,20 @@ import {
   KeyboardEvent,
   MouseEvent,
   useCallback,
+  useContext,
   useEffect,
   useState,
 } from "react";
 import { HiOutlineMagnifyingGlass } from "react-icons/hi2";
 import { fetchWeatherData } from "../../utils/fetchWeatherData";
 
-import { ClimateProps } from "../Weather";
 import Loading from "../Loading";
-import Error from "../Error";
+
+import { PrefetchCityContext } from "../../app/[city]/(prefetchContext)";
+import { ClimateContext } from "../MainCard";
 
 import "./styles.scss";
-
-interface SearchItemsProps {
-  prefetch?: string;
-  setClimate(climate: ClimateProps | null): void;
-}
+import Error, { ErrorContext } from "../Error";
 
 const randomCities = [
   "São Paulo, SP",
@@ -35,12 +33,12 @@ const randomCities = [
   "Houston, TX",
 ];
 
-export default function SearchItems({
-  prefetch,
-  setClimate,
-}: SearchItemsProps) {
-  const [city, setCity] = useState(prefetch ?? "");
-  const [error, setError] = useState("");
+export default function SearchItems() {
+  const prefetchCity = useContext(PrefetchCityContext);
+  const climate = useContext(ClimateContext);
+  const error = useContext(ErrorContext);
+
+  const [city, setCity] = useState(prefetchCity ?? "");
   const [randomCity, setRandomCity] = useState(
     randomCities[Math.floor(Math.random() * randomCities.length)]
   );
@@ -50,10 +48,10 @@ export default function SearchItems({
   const handleInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setCity(value);
-    setError("");
+    error.setError("");
 
-    if (value.length > 25) setError("Cidade não encontrada.");
-    if (value === "") setError("Insira uma cidade.");
+    if (value.length > 25) error.setError("Cidade não encontrada.");
+    if (value === "") error.setError("Insira uma cidade.");
   }, []);
 
   const handleSearch = useCallback(
@@ -68,7 +66,7 @@ export default function SearchItems({
         return;
       }
 
-      setClimate({
+      climate.setClimate({
         temperature: <Loading />,
         humidity: <Loading />,
         wind: <Loading />,
@@ -76,15 +74,15 @@ export default function SearchItems({
 
       fetchWeatherData(city)
         .then(({ temperature, humidity, wind }) => {
-          setClimate({
+          climate.setClimate({
             temperature,
             humidity,
             wind,
           });
         })
         .catch(() => {
-          setError("Cidade não encontrada.");
-          setClimate(null);
+          error.setError("Cidade não encontrada.");
+          climate.setClimate(null);
         });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -92,7 +90,7 @@ export default function SearchItems({
   );
 
   useEffect(() => {
-    if (prefetch) handleSearch();
+    if (prefetchCity) handleSearch();
 
     // Update random city every 5 seconds
     const interval = setInterval(() => {
@@ -134,8 +132,6 @@ export default function SearchItems({
           </button>
         </div>
       </div>
-
-      {error && <Error data={error} />}
     </>
   );
 }

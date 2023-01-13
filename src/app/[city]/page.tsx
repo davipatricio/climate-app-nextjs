@@ -1,11 +1,12 @@
 "use client";
 
 import MainCard from "../../components/MainCard";
+import PrefetchCity from "./(prefetchContext)";
 
 export default function CustomHome({ params }: { params: { city: string } }) {
   return (
-    <>
-      <MainCard prefetch={decodeURIComponent(params.city)} />
-    </>
+    <PrefetchCity city={decodeURIComponent(params.city)}>
+      <MainCard />
+    </PrefetchCity>
   );
 }

@@ -1,16 +1,23 @@
+import { useContext } from "react";
 import { BsThermometerSun } from "react-icons/bs";
 import { TbWind } from "react-icons/tb";
 import { WiHumidity } from "react-icons/wi";
+import { ClimateContext } from "../MainCard";
 
 import "./styles.scss";
 
-export interface ClimateProps {
+export interface WeatherData {
   temperature: string | JSX.Element;
   humidity: string | JSX.Element;
   wind: string | JSX.Element;
 }
 
-export default function Climate({ climate }: { climate: ClimateProps }) {
+export default function Weather() {
+  const { climate } = useContext(ClimateContext);
+
+  // Do not render if there is no data
+  if (!climate) return <></>;
+
   return (
     <div className="main-card__weather">
       <div>

@@ -1,13 +1,20 @@
+import { createContext } from "react";
 import "./styles.scss";
 
-interface ErrorProps {
-  data: string;
+export interface ErrorContextProps {
+  error: string;
+  setError(error: string): void;
 }
 
-export default function Error({ data }: ErrorProps) {
+export const ErrorContext = createContext<ErrorContextProps>({
+  error: "",
+  setError: (d: string) => {},
+});
+
+export default function Error({ error }: { error: string }) {
   return (
     <div className="form-error">
-      <p>{data}</p>
+      <p>{error}</p>
     </div>
   );
 }
