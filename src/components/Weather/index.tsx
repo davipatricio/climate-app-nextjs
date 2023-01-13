@@ -2,6 +2,8 @@ import { BsThermometerSun } from "react-icons/bs";
 import { TbWind } from "react-icons/tb";
 import { WiHumidity } from "react-icons/wi";
 
+import "./styles.scss";
+
 export interface ClimateProps {
   temperature: string | JSX.Element;
   humidity: string | JSX.Element;

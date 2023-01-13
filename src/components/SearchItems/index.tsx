@@ -8,9 +8,13 @@ import {
   useState,
 } from "react";
 import { HiOutlineMagnifyingGlass } from "react-icons/hi2";
-import { fetchWeatherData } from "../utils/fetchWeatherData";
-import { ClimateProps } from "./Climate";
-import Loading from "./Loading";
+import { fetchWeatherData } from "../../utils/fetchWeatherData";
+
+import { ClimateProps } from "../Weather";
+import Loading from "../Loading";
+import Error from "../Error";
+
+import "./styles.scss";
 
 interface SearchItemsProps {
   prefetch?: string;
@@ -131,11 +135,7 @@ export default function SearchItems({
         </div>
       </div>
 
-      {error && (
-        <div className="form-error">
-          <p>{error}</p>
-        </div>
-      )}
+      {error && <Error data={error} />}
     </>
   );
 }

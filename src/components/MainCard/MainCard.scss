@@ -1,0 +1,34 @@
+div.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 100vh;
+}
+
+div.main-card {
+  background-color: #daddd8;
+  width: 475px;
+  min-height: 470px;
+  border-radius: 30px;
+  padding: 2px;
+  padding-bottom: 16px;
+
+  @media (max-width: 400px) {
+    width: 95vw;
+  }
+
+  .main-card__image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    width: 100%;
+    height: 20%;
+
+    font-size: 70px;
+  }
+
+}

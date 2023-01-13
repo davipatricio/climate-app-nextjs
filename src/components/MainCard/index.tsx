@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AiFillCloud } from "react-icons/ai";
-import SearchItems from "./SearchItems";
-import Climate, { ClimateProps } from "./Climate";
+import SearchItems from "../SearchItems";
+import Climate, { ClimateProps } from "../Weather";
 
 import "./MainCard.scss";
 

@@ -1,0 +1,31 @@
+.main-card__weather {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* break if the screen is too small */
+  @media (max-width: 400px) {
+    flex-direction: column;
+  }
+
+  margin-top: 50px;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 70%;
+    margin: 5px;
+
+    p {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    svg {
+      font-size: 26px;
+      width: 35px;
+    }
+  }
+}
