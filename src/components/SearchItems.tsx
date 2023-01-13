@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import { HiOutlineMagnifyingGlass } from "react-icons/hi2";
+import { fetchWeatherData } from "../utils/fetchWeatherData";
 import { ClimateProps } from "./Climate";
 import Loading from "./Loading";
 
@@ -36,17 +37,11 @@ export default function SearchItems({
 }: SearchItemsProps) {
   const [city, setCity] = useState(prefetch ?? "");
   const [error, setError] = useState("");
-  const [randomCity, setRandomCity] = useState(randomCities[Math.floor(Math.random() * randomCities.length)]);
+  const [randomCity, setRandomCity] = useState(
+    randomCities[Math.floor(Math.random() * randomCities.length)]
+  );
 
   const router = useRouter();
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setRandomCity(randomCities[Math.floor(Math.random() * randomCities.length)]);
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   const handleInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -58,37 +53,34 @@ export default function SearchItems({
   }, []);
 
   const handleSearch = useCallback(
-    (
+    async (
       event?: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLInputElement>
     ) => {
       if (event) {
         event.preventDefault();
+
         // Redirect to the city page
         router.replace(`/${encodeURIComponent(city)}`);
         return;
       }
 
-      // Display a spinner
       setClimate({
         temperature: <Loading />,
         humidity: <Loading />,
         wind: <Loading />,
       });
 
-      fetch(`/api/getWeather?city=${encodeURIComponent(city)}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.error) {
-            setError("Cidade não encontrada.");
-            setClimate(null);
-            return;
-          }
-
+      fetchWeatherData(city)
+        .then(({ temperature, humidity, wind }) => {
           setClimate({
-            temperature: data.temperature,
-            humidity: `${data.humidity}%`,
-            wind: data.wind,
+            temperature,
+            humidity,
+            wind,
           });
+        })
+        .catch(() => {
+          setError("Cidade não encontrada.");
+          setClimate(null);
         });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -97,6 +89,15 @@ export default function SearchItems({
 
   useEffect(() => {
     if (prefetch) handleSearch();
+
+    // Update random city every 5 seconds
+    const interval = setInterval(() => {
+      setRandomCity(
+        randomCities[Math.floor(Math.random() * randomCities.length)]
+      );
+    }, 5000);
+
+    return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
