@@ -36,6 +36,7 @@ export default async function handler(
     return;
   }
 
+  // Fetch the latitude and longitude of the provided city
   const latReq = await fetch(
     `https://geocoding-api.open-meteo.com/v1/search?name=${decodeURIComponent(
       city
@@ -43,6 +44,7 @@ export default async function handler(
   );
   const latRes: GeocodingResponse = await latReq.json();
 
+  // If the city is not found, return an error
   if (!latRes.results) {
     res.status(400).json({ error: `Cidade ou estado desconhecido.` });
     return;
@@ -50,19 +52,34 @@ export default async function handler(
 
   const { latitude, longitude } = latRes.results[0];
 
+  // Fetch the weather data
   const climateReq = await fetch(
     `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relativehumidity_2m,windspeed_10m`
   );
   const climateRes: OpenMeteoResponse = await climateReq.json();
 
+  // If the API returns an error, return saying that the city is unknown
   if (climateRes.error) {
     res.status(400).json({ error: `Cidade ou estado desconhecido.` });
     return;
   }
 
+  // Get all the known data for the last hour
+  let { temperature_2m, relativehumidity_2m, windspeed_10m } =
+    climateRes.hourly;
+
+  // Get the units for the data
+  const temperatureUnit = climateRes.hourly_units.temperature_2m;
+  const windUnit = climateRes.hourly_units.windspeed_10m;
+
+  // Get the last hour's data
+  const temperature = temperature_2m.splice(-1);
+  const humidity = relativehumidity_2m.splice(-1);
+  const wind = windspeed_10m.splice(-1);
+
   res.status(200).json({
-    temperature: `${climateRes.hourly.temperature_2m[0]}${climateRes.hourly_units.temperature_2m}`,
-    humidity: climateRes.hourly.relativehumidity_2m[0],
-    wind: `${climateRes.hourly.windspeed_10m[0]}${climateRes.hourly_units.windspeed_10m}`,
+    temperature: `${temperature}${temperatureUnit}`,
+    humidity,
+    wind: `${wind}${windUnit}`,
   });
 }
