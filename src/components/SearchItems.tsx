@@ -36,10 +36,17 @@ export default function SearchItems({
 }: SearchItemsProps) {
   const [city, setCity] = useState(prefetch ?? "");
   const [error, setError] = useState("");
+  const [randomCity, setRandomCity] = useState(randomCities[Math.floor(Math.random() * randomCities.length)]);
+
   const router = useRouter();
 
-  const randomCity =
-    randomCities[Math.floor(Math.random() * randomCities.length)];
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRandomCity(randomCities[Math.floor(Math.random() * randomCities.length)]);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
