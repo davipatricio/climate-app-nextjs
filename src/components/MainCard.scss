@@ -1,0 +1,141 @@
+div.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 100vh;
+}
+
+div.main-card {
+  background-color: #daddd8;
+  width: 475px;
+  min-height: 470px;
+  border-radius: 30px;
+  padding: 2px;
+  padding-bottom: 16px;
+
+  @media (max-width: 400px) {
+    width: 95vw;
+  }
+
+  .form-error {
+    margin-top: 5px;
+    margin-left: 25px;
+
+    p {
+      color: red;
+      font-size: 16px;
+      font-weight: 300;
+    }
+  }
+
+  .main-card__image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    width: 100%;
+    height: 20%;
+
+    font-size: 70px;
+  }
+
+  .main-card__city {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    p {
+      font-weight: 800;
+      font-size: 30px;
+    }
+  }
+
+  .main-card__input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5px;
+
+    input {
+      width: 200px;
+      text-align: center;
+      font-family: "Poppins";
+      height: 35px;
+      border: none;
+      border-radius: 16px;
+      margin-right: 16px;
+
+      &:hover {
+        background-color: #f1f1f1;
+        transition: 0.5s;
+      }
+    }
+
+    button {
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 16px;
+      background-color: #fff;
+      transition: 0.7s;
+
+      &:is([disabled]) {
+        background-color: #adadad;
+        cursor: not-allowed;
+      }
+
+      &:hover {
+        &:not([disabled]) {
+          background-color: #ccc;
+          cursor: pointer;
+        }
+      }
+
+      span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #1c1c1c;
+        font-weight: 600;
+        font-size: 16px;
+      }
+    }
+  }
+
+  .main-card__weather {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* break if the screen is too small */
+    @media (max-width: 400px) {
+      flex-direction: column;
+    }
+
+    margin-top: 50px;
+
+    > div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-evenly;
+      width: 70%;
+      margin: 5px;
+
+      p {
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      svg {
+        font-size: 26px;
+        width: 35px;
+      }
+    }
+  }
+}
