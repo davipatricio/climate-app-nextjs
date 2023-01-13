@@ -13,17 +13,19 @@ export interface ClimateProps {
 export default function Climate({ climate }: { climate: ClimateProps }) {
   return (
     <div className="main-card__weather">
-      <div className="main-card__weather__temperature">
+      <div>
         <BsThermometerSun />
         <p>Temperatura</p>
         <span>{climate.temperature}</span>
       </div>
-      <div className="main-card__weather__humidity">
+
+      <div>
         <WiHumidity />
         <p>Umidade</p>
         <span>{climate.humidity}</span>
       </div>
-      <div className="main-card__weather__wind">
+
+      <div>
         <TbWind />
         <p>Vento</p>
         <span>{climate.wind}</span>
